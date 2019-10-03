@@ -35,19 +35,19 @@ def HA(A, taf, x_guess):
     def obj_fun(x):
 
 	# Start the value of the objective function at 0     
-	b=0
+    	b=0
 
 	# This adds up each k column of A scaled by the k-th ancestry
-        for i in range(0,k):
+    	for i in range(0,k):
             b=b + x[i]*A[:,i:(i+1)]
 	# After the for loop, b is an Nx1 vector which contains the value of the mixture model for all N SNP's
 
 	# Now we subtract off the total allele frequency at each SNP      
-	b=b-taf
+    	b=b-taf
 
 	# Finally we square every entry of the Nx1 vector b, and add them all up.
 	# This is the value of the objective function, which we now return
-        return np.sum(b**2, axis=0)[0]
+    	return np.sum(b**2, axis=0)[0]
     
     # This is the gradient of the objective function!
     def grad_obj_fun(x):
@@ -56,16 +56,16 @@ def HA(A, taf, x_guess):
         gradvec = np.zeros((k,1))
 
 	# Start the value of the gradient entries with 0        
-	d=0
+        d=0
 
 	# We still need the value of the "inside" of the objective function, so we repeat part of what we did above:        
-	for i in range(0,k):
+        for i in range(0,k):
             d=d + x[i]*A[:,i:(i+1)]
         d=d-taf
 	# Now d is Nx1 and contains the value of the mixture model minus the total allele frequencies at each SNP
 
 	# Now we form the k entries of the gradient and return that vector        
-	for i in range(0,k):
+        for i in range(0,k):
             gradvec[i,:] = np.sum(2*A[:,i:(i+1)]*d, axis=0)
         return gradvec
 
