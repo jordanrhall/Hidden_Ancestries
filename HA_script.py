@@ -71,9 +71,20 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     if D is None:
         print('Please specify Nxk data matrix D.')
         return
-    
+
+    if abs(np.shape(np.shape(D))[0]-2)>0
+        print('Please ensure that data matrix D is size Nxk.')
+        return
+   
     if k is None:
         print('Please specify k, the number of ancestries.')
+        return
+
+    if isinstance(k,int)==False:
+        print('Please ensure that k is an integer.')
+        return
+    elif k <=0:
+        print('Please ensure that k is a positive integer.')
         return
 
     if x_guess is None:
