@@ -72,7 +72,7 @@ def HA(D=None, k=None, x_guess=None, obs=1):
         print('Please specify Nxk data matrix D.')
         return
 
-    if abs(np.shape(np.shape(D))[0]-2)>0
+    if abs(np.shape(np.shape(D))[0]-2)>0:
         print('Please ensure that data matrix D is size Nxk.')
         return
    
