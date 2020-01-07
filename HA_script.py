@@ -90,6 +90,13 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     if x_guess is None:
         x_guess=np.transpose(1/k*np.ones((k,1)))
 
+    if abs(np.shape(np.shape(x_guess))[0]-1)>0:
+        print('Please ensure that initial iterate x_guess is a vector, size kx1 or 1xk.')
+        return
+
+    if abs(np.shape(x_guess)[1]-k)>0:
+        x_guess=np.transpose(np.copy(x_guess))
+
     # Use the data_processor to take the info we need out of the data frame D
     data_array=data_processor(D,k,obs)
     A = data_array[0]
