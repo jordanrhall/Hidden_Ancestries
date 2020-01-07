@@ -66,7 +66,15 @@ def data_processor(D,k,obs):
  ## 3. The run time of the algoirthm as a scalar value, measured in seconds
 
 
-def HA(D, k, x_guess=None, obs=1):
+def HA(D=None, k=None, x_guess=None, obs=1):
+
+    if D is None:
+        print('Please specify Nxk data matrix D.')
+        return
+    
+    if k is None:
+        print('Please specify k, the number of ancestries.')
+        return
 
     if x_guess is None:
         x_guess=np.transpose(1/k*np.ones((k,1)))
