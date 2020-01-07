@@ -90,7 +90,7 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     if x_guess is None:
         x_guess=np.transpose(1/k*np.ones((k,1)))
 
-    if abs(np.shape(x_guess)[0]-1)>0 and abs(np.shape(x_guess)[1]-1)==0:
+    if abs(np.shape(x_guess)[0]-1)>0 and abs(np.shape(x_guess)[1]-1)>0:
         print('Please ensure that initial iterate x_guess is a vector, size kx1 or 1xk.')
         return
 
