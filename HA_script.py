@@ -66,7 +66,10 @@ def data_processor(D,k):
  ## 3. The run time of the algoirthm as a scalar value, measured in seconds
 
 
-def HA(D, k, x_guess=np.transpose(1/k*np.ones((k,1))), obs=1):
+def HA(D, k, x_guess=None, obs=1):
+
+    if x_guess is None:
+        x_guess=np.transpose(1/k*np.ones((k,1)))
 
     # Use the data_processor to take the info we need out of the data frame D
     data_array=data_processor(D,k,obs)
