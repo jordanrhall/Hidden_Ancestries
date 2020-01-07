@@ -25,7 +25,7 @@ import timeit
 
  ## 2. The total allele frequency called "taf" which should be an Nx1 vector
 
-def data_processor(D,k):
+def data_processor(D,k,obs):
     N = np.shape(D)[0] # N=number of SNPs!
     A = np.zeros((N,k))
     taf = np.zeros((N,1))
