@@ -156,9 +156,6 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     # These are wrappers that make our constraints (all proportions must add to 1) and our bounds (all proportions are 0 or greater)
     cons = ({'type': 'eq', 'fun': lambda x:  np.sum(x,axis=0) -1},)
 
-    for i in range(0,k-1):
-        cons = cons + ({'type': 'ineq', 'fun': lambda x: x[i]},)
-
     bnds = ((0, None),)
 
     for i in range(0,k-1):
