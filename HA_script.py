@@ -83,6 +83,7 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     if isinstance(k,int)==False:
         print('Please ensure that k is an integer.')
         return
+
     elif k <=0:
         print('Please ensure that k is a positive integer.')
         return
@@ -96,6 +97,15 @@ def HA(D=None, k=None, x_guess=None, obs=1):
 
     if abs(np.shape(x_guess)[1]-k)>0:
         x_guess=np.transpose(np.copy(x_guess))
+
+
+    if isinstance(obs,int)==False:
+        print('Please ensure that obs is an integer.')
+        return
+
+    elif obs <=0:
+        print('Please ensure that obs is a positive integer.')
+        return
 
     # Use the data_processor to take the info we need out of the data frame D
     data_array=data_processor(D,k,obs)
