@@ -1,4 +1,4 @@
-### Hidden Ancestries Script
+### Hidden Ancestries Script (v 2.0)
 
 import numpy as np
 import scipy as scipy
@@ -12,31 +12,38 @@ import timeit
 ### A data-processing function that takes 3 inputs: 
 
  ## 1. A user-input genetic data array D -- needs to be processed via pandas on the python side!!! 
- ## Note that D should be of size Nx(k+1+?) where we know there are N=number of SNPs rows and at least k columns, with at least one more for the total allele frequencies, and potentially ? other reference info (like SNP location, chromosome number, etc...)
+ ## Note that D should be of size Nx(5+k+t) where we know there are N=number of SNPs rows and 5 columns not needed for computations (see data formatting standards for more info), k columns for each of the reference ancestries, and t columns for the of the observed ancestries
 
- ## 2. the number of ancestries, k=2,3,4,..., 
+ ## 2. the number of refence ancestries, k=2,3,4,..., 
 
- ## 3. obs = 1, 2, 3, etc is which column to pull the observed/taf from *after* the MAFs
- ## So for example, if the taf is stored in the first column after the MAFs, then obs=1. This is the default for HA (below).
+ ## 3. obs = 1, 2, 3, etc is which column to pull the observed/taf from *after* the reference ancestries
+ ## So for example, if the observed is stored in the first column after the reference ancestries, then obs=1. This is the default for HA (below).
 
 ### and returns 2 outputs:
 
- ## 1. Genetic data in an input array "A" size Nxk containing N SNPs (these are the rows), and k ancestries (these are the columns);
+ ## 1. Genetic data in an input array "A" size Nxk containing N SNPs (these are the rows), and k reference ancestries (these are the columns);
 
- ## 2. The total allele frequency called "taf" which should be an Nx1 vector
+ ## 2. The observed or "total allele frequency" called "taf" in this code, which should be an Nx1 vector
 
 def data_processor(D,k,obs):
+
     N = np.shape(D)[0] # N=number of SNPs!
     A = np.zeros((N,k))
     taf = np.zeros((N,1))
     names = D.columns # collect list of column names
 
-    # Assume that D has 3 columns we do not need (columns 0, 1 and 2 in python)...
-    # Then we can grab out the MAFs
-    for i in range(2,2+k):
-        A[:,i-2] = D[names[i]]
+    # Here we make sure that naming conventions are correct in given data and matches the number of reference ancestries, k
+    for i in range(0,k):
+        if 'ref' in names[i+5] == False:
+            print('Please ensure that all K reference populations are labeled with ref. See data formatting standards for more details.')
+            return
 
-    taf[:,0] = D[names[k+1+obs]] # + 1 because python starts indexing at 0.
+    # Assume that D has 5 columns we do not need for calculations (columns 0, 1, 2, 3 and 4 in python)...
+    # Then we can grab out the reference ancestries
+    for i in range(5,5+k):
+        A[:,i-5] = D[names[i]]
+
+    taf[:,0] = D[names[k+4+obs]] # + 1 because python starts indexing at 0.
 
     return A, taf
 
@@ -52,14 +59,14 @@ def data_processor(D,k,obs):
  
  ## 2. A starting guess "x_guess" which should be a kx1 vector. Default is 1/k*(1,1,...,1).
 
- ## 3. The number of ancestries in the input data, k
+ ## 3. The number of reference ancestries in the input data, k
 
- ## 4. obs = 1, 2, 3, etc is which column to pull the observed/taf from *after* the MAFs
- ## So for example, if the taf is stored in the first column after the MAFs, then obs=1. This is the default for HA (below).
+ ## 4. obs = 1, 2, 3, etc is which column to pull the observed/taf from *after* the reference ancestries
+ ## So for example, if the taf is stored in the first column after the reference ancestries, then obs=1. This is the default for HA (below).
     
 ### and returns 3 outputs:
 
- ## 1. The hidden proportions of every ancestry in the data as a kx1 vector
+ ## 1. The hidden proportions of every reference ancestry in the data as a kx1 vector
     
  ## 2. The number of iterations that SLSQP did as a scalar value
 
@@ -77,7 +84,7 @@ def HA(D=None, k=None, x_guess=None, obs=1):
         return
    
     if k is None:
-        print('Please specify k, the number of ancestries.')
+        print('Please specify k, the number of reference ancestries.')
         return
 
     if isinstance(k,int)==False:
