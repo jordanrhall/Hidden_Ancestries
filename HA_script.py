@@ -14,7 +14,7 @@ import timeit
  ## 1. A user-input genetic data array D -- needs to be processed via pandas on the python side!!! 
  ## Note that D should be of size Nx(5+k+t) where we know there are N=number of SNPs rows and 5 columns not needed for computations (see data formatting standards for more info), k columns for each of the reference ancestries, and t columns for the of the observed ancestries
 
- ## 2. the number of refence ancestries, k=2,3,4,..., 
+ ## 2. the number of reference ancestries, k=2,3,4,..., 
 
  ## 3. obs = 1, 2, 3, etc is which column to pull the observed/taf from *after* the reference ancestries
  ## So for example, if the observed is stored in the first column after the reference ancestries, then obs=1. This is the default for HA (below).
@@ -34,7 +34,7 @@ def data_processor(D,k,obs):
 
     # Here we make sure that naming conventions are correct in given data and matches the number of reference ancestries, k
     for i in range(0,k):
-        if 'ref' in names[i+5] == False:
+        if ('ref' in names[i+5]) == False:
             print('Please ensure that all K reference populations are labeled with ref. See data formatting standards for more details.')
             return
 
@@ -105,6 +105,8 @@ def HA(D=None, k=None, x_guess=None, obs=1):
     if abs(np.shape(x_guess)[1]-k)>0:
         x_guess=np.transpose(np.copy(x_guess))
 
+    if abs(np.shape(x_guess)[1]-k)>0:
+        print('Please ensure that initial iterate x_guess is a vector, size kx1 or 1xk.')
 
     if isinstance(obs,int)==False:
         print('Please ensure that obs is an integer.')
